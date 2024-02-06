@@ -139,7 +139,10 @@ app.post("/loggingin", async (req, res) => {
 
   const query = "SELECT * FROM user WHERE username = ? AND password = ?";
   const [rows] = await database.query(query, [username, password]);
-  console.log("User Data:", rows);
+
+  if (rows.length >= 1) {
+    res.send(rows);
+  }
 
   if (results) {
     if (results.length == 1) {
