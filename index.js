@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const saltRounds = 12;
+const sanitizeHtml = require("sanitize-html");
 
 const database = include("databaseConnection");
 const db_utils = include("database/db_utils");
@@ -102,7 +103,12 @@ app.post("/submitUser", async (req, res) => {
     );
   } else if (!/^[a-zA-Z! '@#$%^&*()_+{}\[\]:;<>,.?~\\/-]+$/i.test(username)) {
     // Invalid input, handle the error appropriately
-    res.status(400).send("Invalid username");
+    const invalidUsername = "<script>alert('XSS');</script>";
+    const sanitizedUsername = sanitizeHtml(invalidUsername);
+
+    res
+      .status(400)
+      .send(`Invalid username: no numbers allowed '${sanitizedUsername}'`);
     return;
   }
 
