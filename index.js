@@ -20,6 +20,7 @@ const expireTime = 60 * 60 * 1000; // expire after one hour
 /* secret information section */
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
+const mongodb_host = process.env.MONGODB_HOST;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
@@ -27,7 +28,7 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
 var mongoStore = MongoStore.create({
-  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@a1.mjtfzte.mongodb.net/sessions`,
+  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
   crypto: {
     secret: mongodb_session_secret,
   },
